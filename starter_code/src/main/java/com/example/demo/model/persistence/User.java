@@ -12,13 +12,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity
 @Table(name = "`user`")
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @RequiredArgsConstructor
 public class User {
 
 	@Id
@@ -28,9 +27,11 @@ public class User {
 	
 	@Column(nullable = false, unique = true)
 	@JsonProperty
+	@NonNull
 	private String username;
 
 	@Column(nullable = false)
+	@NonNull
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 

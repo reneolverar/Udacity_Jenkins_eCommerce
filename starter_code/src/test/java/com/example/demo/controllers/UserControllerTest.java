@@ -1,14 +1,19 @@
 package com.example.demo.controllers;
 
 import com.example.demo.TestUtils;
+import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.repositories.CartRepository;
+import com.example.demo.model.persistence.repositories.ItemRepository;
+import com.example.demo.model.persistence.repositories.OrderRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -48,5 +53,14 @@ public class UserControllerTest {
         assertEquals(0, u.getId());
         assertEquals("test", u.getUsername());
         assertEquals("thisIsHashed", u.getPassword());
+
+        when(userRepository.findByUsername("test")).thenReturn(new User("test", "thisIsHashed"));
+        u = userController.findByUserName(r.getUsername()).getBody();
+        assertEquals("test", u.getUsername());
+
+        Optional<User> newUser = Optional.of(new User(0L, "test", "thisIsHashed", null));
+        when(userRepository.findById(0L)).thenReturn(newUser);
+        u = userController.findById(response.getBody().getId()).getBody();
+        assertEquals(0, u.getId());
     }
 }
