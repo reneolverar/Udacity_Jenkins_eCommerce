@@ -1,0 +1,115 @@
+Started by user admin
+Running as SYSTEM
+Building in workspace /var/jenkins_home/workspace/MyFirstJob
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] Done
+The recommended git tool is: NONE
+using credential 98d43d9b-89fa-4ab5-ad7b-b2a89b5b23cf
+Cloning the remote Git repository
+Cloning repository https://github.com/reneolverar/Udacity_Jenkins_eCommerce.git
+ > git init /var/jenkins_home/workspace/MyFirstJob # timeout=10
+Fetching upstream changes from https://github.com/reneolverar/Udacity_Jenkins_eCommerce.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.36.2'
+using GIT_SSH to set credentials
+Verifying host key using known hosts file
+You're using 'Known hosts file' strategy to verify ssh host keys, but your known_hosts file does not exist, please go to 'Manage Jenkins' -> 'Configure Global Security' -> 'Git Host Key Verification Configuration' and configure host key verification.
+ > git fetch --tags --force --progress -- https://github.com/reneolverar/Udacity_Jenkins_eCommerce.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/reneolverar/Udacity_Jenkins_eCommerce.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision dc23f8985bc3cbe372c3ae11115908ae6510a76f (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f dc23f8985bc3cbe372c3ae11115908ae6510a76f # timeout=10
+Commit message: "Screenshots"
+ > git rev-list --no-walk dc23f8985bc3cbe372c3ae11115908ae6510a76f # timeout=10
+[MyFirstJob] $ mvn -f starter_code/pom.xml clean compile package
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------< com.example:auth-course >-----------------------
+[INFO] Building auth-course 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ war ]---------------------------------
+[WARNING] The artifact org.slf4j:slf4j-log4j12:jar:2.0.5 has been relocated to org.slf4j:slf4j-reload4j:jar:2.0.5
+[INFO]
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ auth-course ---
+[INFO] Deleting /var/jenkins_home/workspace/MyFirstJob/starter_code/target
+[INFO]
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ auth-course ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 3 resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ auth-course ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 21 source files to /var/jenkins_home/workspace/MyFirstJob/starter_code/target/classes
+[INFO]
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ auth-course ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 3 resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ auth-course ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 21 source files to /var/jenkins_home/workspace/MyFirstJob/starter_code/target/classes
+[INFO]
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ auth-course ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/MyFirstJob/starter_code/src/test/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ auth-course ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 6 source files to /var/jenkins_home/workspace/MyFirstJob/starter_code/target/test-classes
+[INFO] /var/jenkins_home/workspace/MyFirstJob/starter_code/src/test/java/com/example/demo/TestUtils.java: /var/jenkins_home/workspace/MyFirstJob/starter_code/src/test/java/com/example/demo/TestUtils.java uses or overrides a deprecated API.
+[INFO] /var/jenkins_home/workspace/MyFirstJob/starter_code/src/test/java/com/example/demo/TestUtils.java: Recompile with -Xlint:deprecation for details.
+[INFO]
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ auth-course ---
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.example.demo.SareetaApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.198 s - in com.example.demo.SareetaApplicationTests
+[INFO] Running com.example.demo.controllers.CartControllerTest
+0    [main] INFO  com.example.demo.controllers.UserController  - User not found: null
+4    [main] INFO  com.example.demo.controllers.UserController  - Item not found: 0
+5    [main] INFO  com.example.demo.controllers.UserController  - User not found: null
+8    [main] INFO  com.example.demo.controllers.UserController  - Item not found: 0
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.272 s - in com.example.demo.controllers.CartControllerTest
+[INFO] Running com.example.demo.controllers.ItemControllerTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s - in com.example.demo.controllers.ItemControllerTest
+[INFO] Running com.example.demo.controllers.OrderControllerTest
+158  [main] INFO  com.example.demo.controllers.UserController  - Order submit failed. User not found: wrongUser
+165  [main] INFO  com.example.demo.controllers.UserController  - Order request failed. User not found: wrongUser
+169  [main] INFO  com.example.demo.controllers.UserController  - Order set for: testUser
+170  [main] INFO  com.example.demo.controllers.UserController  - Order set for: testUser
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.094 s - in com.example.demo.controllers.OrderControllerTest
+[INFO] Running com.example.demo.controllers.UserControllerTest
+222  [main] INFO  com.example.demo.controllers.UserController  - User not saved, either too short or different confirmation:shortP, shortP
+Error - Either length is less than 7 or pass and conf pass do not match. Unable to create testUser
+226  [main] INFO  com.example.demo.controllers.UserController  - User not saved, either too short or different confirmation:differentPassword, asfasdfs
+Error - Either length is less than 7 or pass and conf pass do not match. Unable to create testUser
+228  [main] INFO  com.example.demo.controllers.UserController  - User name set with test
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.052 s - in com.example.demo.controllers.UserControllerTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO]
+[INFO] --- maven-war-plugin:3.2.2:war (default-war) @ auth-course ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [auth-course] in [/var/jenkins_home/workspace/MyFirstJob/starter_code/target/auth-course-0.0.1-SNAPSHOT]
+[INFO] Processing war project
+[INFO] Webapp assembled in [927 msecs]
+[INFO] Building war: /var/jenkins_home/workspace/MyFirstJob/starter_code/target/auth-course-0.0.1-SNAPSHOT.war
+[INFO]
+[INFO] --- spring-boot-maven-plugin:2.1.5.RELEASE:repackage (repackage) @ auth-course ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  24.597 s
+[INFO] Finished at: 2022-12-21T20:12:38Z
+[INFO] ------------------------------------------------------------------------
