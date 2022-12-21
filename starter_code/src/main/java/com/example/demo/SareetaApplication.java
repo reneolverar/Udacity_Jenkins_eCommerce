@@ -26,8 +26,8 @@ public class SareetaApplication {
 		HttpService.setSslSecurityProtocol(SSLSecurityProtocol.TLSv1_2);
 		// Create a map of arguments and add login parameters that you get from splunk
 		ServiceArgs loginArgs = new ServiceArgs();
-		loginArgs.setUsername("reneolverar");
-		loginArgs.setPassword("spRana20!");
+		loginArgs.setUsername("admin");
+		loginArgs.setPassword("password");
 		loginArgs.setHost("127.0.0.1");
 		loginArgs.setPort(8089);
 		// Create a Service instance and log in with the argument map
