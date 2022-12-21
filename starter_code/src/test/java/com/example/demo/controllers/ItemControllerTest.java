@@ -8,8 +8,10 @@ import com.example.demo.model.persistence.repositories.ItemRepository;
 import com.example.demo.model.persistence.repositories.OrderRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
+import com.splunk.TcpInput;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -24,26 +26,15 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class ItemControllerTest {
-
-    private UserController userController;
     private ItemController itemController;
-    private UserRepository userRepository = mock(UserRepository.class);
-    private CartRepository cartRepository = mock(CartRepository.class);
     private ItemRepository itemRepository = mock(ItemRepository.class);
-    private BCryptPasswordEncoder bCryptPasswordEncoder = mock(BCryptPasswordEncoder.class);
+    private TcpInput tcpInput = mock(TcpInput.class);
 
     @Before
     public void setUp() throws IOException {
-        userController = new UserController();
-        TestUtils.injectObjects(userController, "userRepository", userRepository);
-        TestUtils.injectObjects(userController, "cartRepository", cartRepository);
-        TestUtils.injectObjects(userController, "bCryptPasswordEncoder", bCryptPasswordEncoder);
         itemController = new ItemController();
         TestUtils.injectObjects(itemController, "itemRepository", itemRepository);
-
-        when(bCryptPasswordEncoder.encode("testPassword")).thenReturn("thisIsHashed");
-        CreateUserRequest r = new CreateUserRequest("test", "testPassword", "testPassword");
-        ResponseEntity<User> response = userController.createUser(r);
+        TestUtils.injectObjects(itemController, "tcpInput", tcpInput);
     }
 
     @Test

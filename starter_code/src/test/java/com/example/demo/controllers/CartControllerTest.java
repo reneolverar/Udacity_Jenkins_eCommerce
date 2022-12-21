@@ -10,8 +10,10 @@ import com.example.demo.model.persistence.repositories.OrderRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
 import com.example.demo.model.requests.ModifyCartRequest;
+import com.splunk.TcpInput;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +34,7 @@ public class CartControllerTest {
     private UserRepository userRepository = mock(UserRepository.class);
     private ItemRepository itemRepository = mock(ItemRepository.class);
     private CartRepository cartRepository = mock(CartRepository.class);
+    private TcpInput tcpInput = mock(TcpInput.class);
 
     @Before
     public void setUp(){
@@ -39,6 +42,7 @@ public class CartControllerTest {
         TestUtils.injectObjects(cartController, "userRepository", userRepository);
         TestUtils.injectObjects(cartController, "cartRepository", cartRepository);
         TestUtils.injectObjects(cartController, "itemRepository", itemRepository);
+        TestUtils.injectObjects(cartController, "tcpInput", tcpInput);
 
         User user = new User(1L, "testPassword", "testUser", new Cart());
         when(userRepository.findByUsername("testUser")).thenReturn(user);

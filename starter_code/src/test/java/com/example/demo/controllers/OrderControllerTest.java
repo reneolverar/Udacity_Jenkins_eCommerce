@@ -11,8 +11,10 @@ import com.example.demo.model.persistence.repositories.OrderRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
 import com.example.demo.model.requests.ModifyCartRequest;
+import com.splunk.TcpInput;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,18 +30,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class OrderControllerTest {
-
     private OrderController orderController;
     private UserRepository userRepository = mock(UserRepository.class);
     private ItemRepository itemRepository = mock(ItemRepository.class);
     private CartRepository cartRepository = mock(CartRepository.class);
     private OrderRepository orderRepository = mock(OrderRepository.class);
+    private TcpInput tcpInput = mock(TcpInput.class);
 
     @Before
     public void setUp(){
         orderController = new OrderController();
         TestUtils.injectObjects(orderController, "userRepository", userRepository);
         TestUtils.injectObjects(orderController, "orderRepository", orderRepository);
+        TestUtils.injectObjects(orderController, "tcpInput", tcpInput);
 
         User user = new User(0L, "testPassword", "testUser", new Cart());
         Item item0 = new Item(0L, "item0", BigDecimal.valueOf(5), "desc");
