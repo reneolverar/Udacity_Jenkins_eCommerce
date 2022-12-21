@@ -13,9 +13,11 @@ import com.example.demo.model.requests.CreateUserRequest;
 import com.example.demo.model.requests.ModifyCartRequest;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +54,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void submitAndGetOrders() {
+    public void submitAndGetOrders() throws IOException {
         User user = userRepository.findByUsername("testUser");
         user.setCart(cartRepository.findById(0L).get());
         when(userRepository.findByUsername("testUser")).thenReturn(user);
@@ -70,6 +72,17 @@ public class OrderControllerTest {
         when(orderRepository.findByUser(user)).thenReturn(orders);
         List<UserOrder> responseOrders = orderController.getOrdersForUser("testUser").getBody();
         assertEquals(2, responseOrders.size());
+    }
 
+    @Test
+    public void negativeTests() throws IOException {
+        ResponseEntity<UserOrder> response;
+        ResponseEntity<List<UserOrder>> responses;
+
+        response = orderController.submit("wrongUser");
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        responses = orderController.getOrdersForUser("wrongUser");
+        assertEquals(HttpStatus.NOT_FOUND, responses.getStatusCode());
     }
 }

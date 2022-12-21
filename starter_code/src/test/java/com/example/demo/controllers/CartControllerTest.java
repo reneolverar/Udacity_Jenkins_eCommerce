@@ -12,17 +12,18 @@ import com.example.demo.model.requests.CreateUserRequest;
 import com.example.demo.model.requests.ModifyCartRequest;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,19 +40,19 @@ public class CartControllerTest {
         TestUtils.injectObjects(cartController, "cartRepository", cartRepository);
         TestUtils.injectObjects(cartController, "itemRepository", itemRepository);
 
-        User user = new User(0L, "testPassword", "testUser", new Cart());
+        User user = new User(1L, "testPassword", "testUser", new Cart());
         when(userRepository.findByUsername("testUser")).thenReturn(user);
 
-        Item item0 = new Item(0L, "item0", BigDecimal.valueOf(5), "desc");
-        Item item1 = new Item(1L, "item1", BigDecimal.valueOf(10), "desc");
-        when(itemRepository.findById(0L)).thenReturn(Optional.of(item0));
+        Item item1 = new Item(1L, "item1", BigDecimal.valueOf(5), "desc");
+        Item item2 = new Item(2L, "item2", BigDecimal.valueOf(10), "desc");
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item1));
+        when(itemRepository.findById(2L)).thenReturn(Optional.of(item2));
     }
 
     @Test
-    public void addAndRemoveFromCart() {
+    public void addAndRemoveFromCart() throws IOException {
         Cart cart;
-        ModifyCartRequest request = new ModifyCartRequest("testUser", 0L, 1);
+        ModifyCartRequest request = new ModifyCartRequest("testUser", 1L, 1);
         cart = cartController.addTocart(request).getBody();
         assertEquals(BigDecimal.valueOf(5), cart.getTotal());
 
@@ -59,7 +60,7 @@ public class CartControllerTest {
         cart = cartController.addTocart(request).getBody();
         assertEquals(BigDecimal.valueOf(15), cart.getTotal());
 
-        request.setItemId(1L);
+        request.setItemId(2L);
         cart = cartController.addTocart(request).getBody();
         assertEquals(BigDecimal.valueOf(35), cart.getTotal());
 
@@ -67,8 +68,30 @@ public class CartControllerTest {
         assertEquals(BigDecimal.valueOf(15), cart.getTotal());
 
         request.setQuantity(1);
-        request.setItemId(0L);
+        request.setItemId(1L);
         cart = cartController.removeFromcart(request).getBody();
         assertEquals(BigDecimal.valueOf(10), cart.getTotal());
+    }
+
+    @Test
+    public void negativeTests() throws IOException {
+        ResponseEntity<Cart> response;
+        ModifyCartRequest request;
+
+        request = new ModifyCartRequest();
+        response = cartController.addTocart(request);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        request.setUsername("testUser");
+        response = cartController.addTocart(request);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        request = new ModifyCartRequest();
+        response = cartController.removeFromcart(request);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        request.setUsername("testUser");
+        response = cartController.removeFromcart(request);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }

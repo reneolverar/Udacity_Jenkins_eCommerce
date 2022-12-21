@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.TestUtils;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
+import com.example.demo.model.persistence.UserOrder;
 import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.ItemRepository;
 import com.example.demo.model.persistence.repositories.OrderRepository;
@@ -10,9 +11,12 @@ import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -36,7 +40,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createUser() {
+    public void createUser() throws IOException {
         when(bCryptPasswordEncoder.encode("testPassword")).thenReturn("thisIsHashed");
         CreateUserRequest r = new CreateUserRequest();
         r.setUsername("test");
@@ -62,5 +66,19 @@ public class UserControllerTest {
         when(userRepository.findById(0L)).thenReturn(newUser);
         u = userController.findById(response.getBody().getId()).getBody();
         assertEquals(0, u.getId());
+    }
+
+    @Test
+    public void negativeTests() throws IOException {
+        ResponseEntity<User> response;
+
+        response = userController.findByUserName("wrongUser");
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        response = userController.createUser(new CreateUserRequest("testUser", "shortP", "shortP"));
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        response = userController.createUser(new CreateUserRequest("testUser", "differentPassword", "asfasdfs"));
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }

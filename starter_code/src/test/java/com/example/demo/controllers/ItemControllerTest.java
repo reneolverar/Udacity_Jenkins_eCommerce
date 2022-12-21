@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class ItemControllerTest {
     private BCryptPasswordEncoder bCryptPasswordEncoder = mock(BCryptPasswordEncoder.class);
 
     @Before
-    public void setUp(){
+    public void setUp() throws IOException {
         userController = new UserController();
         TestUtils.injectObjects(userController, "userRepository", userRepository);
         TestUtils.injectObjects(userController, "cartRepository", cartRepository);
@@ -46,7 +47,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void getItems() {
+    public void getItems() throws IOException {
         Item item1 = new Item(0L, "item1", BigDecimal.valueOf(5), "desc");
         Item item1_2 = new Item(1L, "item1", BigDecimal.valueOf(5), "desc");
         Item item2 = new Item(2L, "item2", BigDecimal.valueOf(5), "desc");
