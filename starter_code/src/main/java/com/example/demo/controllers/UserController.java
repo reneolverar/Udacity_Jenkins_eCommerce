@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.splunk.TcpInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,16 @@ import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 	@Autowired
+	private TcpInput tcpInput;
+	@Autowired
 	private UserRepository userRepository;
-	
 	@Autowired
 	private CartRepository cartRepository;
 
@@ -43,21 +47,24 @@ public class UserController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
+	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) throws IOException {
 		if(createUserRequest.getPassword().length()<7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
+			tcpInput.submit("User not saved, either too short or different confirmation:" + createUserRequest.getPassword() + ", " + createUserRequest.getConfirmPassword());
+			log.info("User not saved, either too short or different confirmation:" + createUserRequest.getPassword() + ", " + createUserRequest.getConfirmPassword());
 			System.out.println("Error - Either length is less than 7 or pass and conf pass do not match. Unable to create " +
 					createUserRequest.getUsername());
 			return ResponseEntity.badRequest().build();
 		}
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
-		log.info("User name set with ", createUserRequest.getUsername());
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 		Cart cart = new Cart();
 		cartRepository.save(cart);
 		user.setCart(cart);
 		userRepository.save(user);
+		tcpInput.submit( "User name set with " + createUserRequest.getUsername());
+		log.info("User name set with " + createUserRequest.getUsername());
 		return ResponseEntity.ok(user);
 	}
 	
